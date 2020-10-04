@@ -29,8 +29,8 @@ updateGradient();
 draw()
 
 function draw() {
-  let size = width / 100 * scale
-  let m = size / 100 * variance
+  let size = (width + height) / 2 / 100 * scale
+  let m = variance / 100 * size
   for (let x = -m; x < width + m; x += size) {
     for (let y = -m; y < height + m; y += size) {
       let x1 = x + n(x, y) * m
@@ -83,7 +83,7 @@ function updateGradient() {
 }
 
 function updateRotation(e) {
-  rotation = parseFloat(e.value)
+  rotation = parseFloat(e.value) || 0
   updateGradient()
 }
 
@@ -102,31 +102,33 @@ function removeColour() {
 }
 
 function updateWidth(e) {
-  width = parseInt(e.value)
+  width = parseInt(e.value) || 0
   c.setAttribute("width", width)
   s.setAttribute("width", width)
+  updateGradient()
   draw()
 }
 
 function updateHeight(e) {
+  height = parseInt(e.value) || 0
   c.setAttribute("height", height)
   s.setAttribute("height", height)
-  height = parseInt(e.value)
+  updateGradient()
   draw()
 }
 
 function updateScale(e) {
-  scale = parseFloat(e.value)
+  scale = parseFloat(e.value) || 1
   draw()
 }
 
 function updateVariance(e) {
-  variance = parseFloat(e.value)
+  variance = parseFloat(e.value) || 0
   draw()
 }
 
 function updateVarianceScale(e) {
-  varianceScale = parseFloat(e.value)
+  varianceScale = parseFloat(e.value) || 0
   draw()
 }
 
@@ -137,7 +139,7 @@ function updateSeed(e) {
 }
 
 function n(x, y) {
-  return noise.noise2D(x / 100 * (varianceScale / 50 / scale), y / 100 * (varianceScale / 50 / scale))
+  return noise.noise2D(x / 100 * (varianceScale / 1000 * scale), y / 100 * (varianceScale / 1000 * scale))
 }
 
 function drawTriangle(x1, y1, x2, y2, x3, y3) {

@@ -11,8 +11,10 @@ body {
 }
 
 #toolbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   flex: 0 0 auto;
-  padding-top: 40px;
   max-width: 20em;
   overflow-y: auto;
 }
