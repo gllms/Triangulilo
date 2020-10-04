@@ -116,12 +116,12 @@ function updateHeight(e) {
 }
 
 function updateScale(e) {
-  scale = parseInt(e.value)
+  scale = parseFloat(e.value)
   draw()
 }
 
 function updateVariance(e) {
-  variance = parseInt(e.value)
+  variance = parseFloat(e.value)
   draw()
 }
 

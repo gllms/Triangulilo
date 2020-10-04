@@ -6,7 +6,7 @@ body {
   display: flex;
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: "Roboto", sans-serif;
   height: 100vh;
 }
 
@@ -27,12 +27,15 @@ body {
 #toolbar #options label {
   text-align: right;
   margin: 10px;
+  margin-right: 2px;
 }
 
 #toolbar #options input {
   text-align: right;
   margin: 5px;
   width: 6em;
+  border: 1px solid #ccc;
+  font-family: "Roboto", sans-serif;
 }
 
 input[type="text"] {
@@ -44,6 +47,7 @@ input[type="text"] {
   object-fit: contain;
   box-sizing: border-box;
   padding: 50px;
+  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, .2));
 }
 
 #colours {
@@ -75,4 +79,5 @@ input[type="text"] {
 
 #colours button {
   user-select: none;
+  font-family: "Roboto", sans-serif;
 }
