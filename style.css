@@ -1,0 +1,78 @@
+#sampler {
+  display: none;
+}
+
+body {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  height: 100vh;
+}
+
+#toolbar {
+  flex: 0 0 auto;
+  padding-top: 40px;
+  max-width: 20em;
+  overflow-y: auto;
+}
+
+#toolbar #options {
+  display: grid;
+  grid-template-columns: auto auto;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+#toolbar #options label {
+  text-align: right;
+  margin: 10px;
+}
+
+#toolbar #options input {
+  text-align: right;
+  margin: 5px;
+  width: 6em;
+}
+
+input[type="text"] {
+  text-align: left !important;
+}
+
+#result {
+  width: calc(100% - 300px);
+  object-fit: contain;
+  box-sizing: border-box;
+  padding: 50px;
+}
+
+#colours {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#colours input,
+#colours button {
+  width: 30px;
+  height: 30px;
+  margin: 2px;
+  padding: 3px;
+  border: none;
+  background: none;
+  font-size: 25px;
+}
+
+#colours input {
+  padding: 0;
+}
+
+#colours div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+#colours button {
+  user-select: none;
+}
