@@ -4,20 +4,37 @@ $$ = (e) => document.querySelectorAll(e)
 
 clamp = (e, mn, mx) => Math.min(Math.max(e, mn), mx)
 
-dragula($("#colours"))
-
 let width = 1920
 let height = 1080
 let prevWidth = width
 let prevHeight = height
 let scale = 10
-let variance = 50
+let variance = 100
 let varianceScale = 100
 let p = 7919
 let fillStyle = "gradient"
 let gradient
-let pos1 = { x: 0, y: 0 }
-let pos2 = { x: width, y: height }
+let colours = [
+  [0, "#FF0000"],
+  [1, "#FFFF00"]
+]
+let dotIndex = 0
+let dots = {
+  dotStart: {
+    pos: {
+      x: 0,
+      y: 0
+    },
+    colour: "#FF0000"
+  },
+  dotEnd: {
+    pos: {
+      x: width,
+      y: height
+    },
+    colour: "#FFFF00"
+  }
+}
 
 let c = $("#result")
 let ctx = c.getContext("2d")
@@ -33,18 +50,21 @@ let padding = 50
 let dotSize = 16
 let dragging = false
 let dragElement = undefined
+let activeElement = $("#dotStart")
+let dragTip = false
 
 updateGradient()
 draw()
 updateCanvas()
-$("#dot1").style.display = "block"
-$("#dot2").style.display = "block"
+$("#dotStart").style.display = "block"
+$("#dotEnd").style.display = "block"
 
 window.addEventListener("resize", updateCanvas)
+window.addEventListener("resize", updateCenterDots)
 
 function draw() {
   let size = (width + height) / 2 / 100 * scale
-  let m = variance / 100 * size
+  let m = variance
   for (let x = -m; x < width + m; x += size) {
     for (let y = -m; y < height + m; y += size) {
       let x1 = x + n(x, y) * m
@@ -79,28 +99,54 @@ function draw() {
 }
 
 function updateGradient() {
-  gradient = sctx.createLinearGradient(pos1.x, pos1.y, pos2.x, pos2.y)
+  gradient = sctx.createLinearGradient(dots["dotStart"].pos.x, dots["dotStart"].pos.y, dots["dotEnd"].pos.x, dots["dotEnd"].pos.y)
   let a = 1 / ($$("#colours input").length - 1);
-  [...$$("#colours input")].forEach(function (e, i) {
-    gradient.addColorStop(a * i, e.value)
-  })
+  for (let e in dots) {
+    let offset = .5
+    if (e == "dotStart") offset = 0
+    else if (e == "dotEnd") offset = 1
+    else offset = dots[e].pos
+    gradient.addColorStop(offset, dots[e].colour)
+  }
   sctx.fillStyle = gradient
   sctx.fillRect(0, 0, width, height)
   draw()
 }
 
+function updateColour() {
+  let colour = $("#colourInput").value || "#000000"
+  dots[activeElement.getAttribute("dotindex")].colour = colour
+  activeElement.style.background = colour
+  updateGradient()
+}
+
 function addColour() {
-  $("#colours div").insertAdjacentHTML("beforebegin", `<input type="color" value="#000000" oninput="updateGradient(this)" />`)
+  let d = document.createElement("div");
+  d.className = "dot";
+  d.setAttribute("dotindex", dotIndex)
+  dots[dotIndex] = {
+    pos: Math.random(),
+    el: d,
+    colour: "#FF0000"
+  }
+  dotIndex++
+  document.body.appendChild(d)
+  activeElement.classList.remove("active")
+  activeElement = d
+  activeElement.classList.add("active")
+  $("#colourInput").value = "#FF0000"
+  updateCenterDots()
   updateGradient()
 }
 
 function removeColour() {
-  let ee = $$("#colours input")
-  if (ee.length > 2) {
-    let e = ee[ee.length - 1]
-    e.parentElement.removeChild(e)
-    updateGradient()
-  }
+  if (activeElement.id == "dotStart" || activeElement.id == "dotEnd") return
+  let i = activeElement.getAttribute("dotindex")
+  dots[i].el.remove()
+  delete dots[i]
+  activeElement = $("#dotStart")
+  activeElement.classList.add("active")
+  updateGradient()
 }
 
 function updateWidth(e) {
@@ -146,6 +192,8 @@ function updateSeed(e) {
 
 
 function updateCanvas() {
+  let p1 = dots["dotStart"].pos
+  let p2 = dots["dotEnd"].pos
   let w = window.innerWidth - $("#toolbar").clientWidth - 2 * padding
   let h = window.innerHeight - 2 * padding
   if (w / h > width / height) {
@@ -158,31 +206,59 @@ function updateCanvas() {
     c.style.height = factor * height + "px"
   }
 
-  if (prevWidth == 0) pos2.x += width
-  else pos2.x *= width / prevWidth
-  if (prevHeight == 0) pos2.y += height
-  else pos2.y *= height / prevHeight
+  if (prevWidth == 0) p2.x += width
+  else {
+    if (p2.x > p1.x) p2.x *= width / prevWidth
+    else p1.x *= width / prevWidth
+  }
+  if (prevHeight == 0) p2.y += height
+  else {
+    if (p2.y > p1.y) p2.y *= height / prevHeight
+    else p1.y *= height / prevHeight
+  }
 
   prevWidth = width
   prevHeight = height
 
   let r = $("#result").getBoundingClientRect()
 
-  let x1 = r.x + padding - 8 + pos1.x * factor
-  let y1 = r.y + padding - 8 + pos1.y * factor
-  let x2 = r.x + padding - 8 + pos2.x * factor
-  let y2 = r.y + padding - 8 + pos2.y * factor
+  let x1 = r.x + padding - 8 + p1.x * factor
+  let y1 = r.y + padding - 8 + p1.y * factor
+  let x2 = r.x + padding - 8 + p2.x * factor
+  let y2 = r.y + padding - 8 + p2.y * factor
 
-  $("#dot1").style.left = x1 + "px"
-  $("#dot1").style.top = y1 + "px"
-  $("#dot2").style.left = x2 + "px"
-  $("#dot2").style.top = y2 + "px"
+  $("#dotStart").style.left = x1 + "px"
+  $("#dotStart").style.top = y1 + "px"
+  $("#dotEnd").style.left = x2 + "px"
+  $("#dotEnd").style.top = y2 + "px"
+}
+
+function updateCenterDots() {
+  let p1 = dots["dotStart"].pos
+  let p2 = dots["dotEnd"].pos
+
+  for (const k in dots) {
+    if (k == "dotStart" || k == "dotEnd") continue
+
+    let r = $("#result").getBoundingClientRect()
+
+    let vx = p1.x + (p2.x - p1.x) * dots[k].pos
+    let vy = p1.y + (p2.y - p1.y) * dots[k].pos
+    dots[k].el.style.left = r.x + padding - 8 + vx * factor + "px"
+    dots[k].el.style.top = r.y + padding - 8 + vy * factor + "px"
+  }
 }
 
 document.body.addEventListener("mousedown", function (e) {
   if (e.target.classList.contains("dot")) {
     dragElement = e.target
+    activeElement.classList.remove("active")
+    activeElement = e.target
+    activeElement.classList.add("active")
+    if (dragElement.id == "dotStart" || dragElement.id == "dotEnd") dragTip = true
+    else dragTip = false
     dragging = true
+    $("#colourInput").value = dots[dragElement.getAttribute("dotindex")].colour
     e.preventDefault()
   }
 })
@@ -193,32 +269,44 @@ document.body.addEventListener("mouseup", function (e) {
 
 document.body.addEventListener("mousemove", function (e) {
   if (dragging) {
-    let r = $("#result").getBoundingClientRect()
     let mx = e.pageX
     let my = e.pageY
-    if (Math.abs(mx - padding - r.x) < 10) mx = r.x + padding
-    if (Math.abs(mx + padding - r.right) < 10) mx = r.right - padding
-    if (Math.abs(my - padding - r.y) < 10) my = r.y + padding
-    if (Math.abs(my + padding - r.bottom) < 10) my = r.bottom - padding
-    dragElement.style.left = mx - dotSize / 2 + "px"
-    dragElement.style.top = my - dotSize / 2 + "px"
+    let r = $("#result").getBoundingClientRect()
+    if (dragTip) {
+      if (Math.abs(mx - padding - r.x) < 10) mx = r.x + padding
+      if (Math.abs(mx + padding - r.right) < 10) mx = r.right - padding
+      if (Math.abs(my - padding - r.y) < 10) my = r.y + padding
+      if (Math.abs(my + padding - r.bottom) < 10) my = r.bottom - padding
+      dragElement.style.left = mx - dotSize / 2 + "px"
+      dragElement.style.top = my - dotSize / 2 + "px"
 
-    let x = (mx - r.x - padding + 8) / factor - dotSize
-    let y = (my - r.y - padding + 8) / factor - dotSize
-    if (dragElement.id == "dot1") {
-      pos1.x = x || 0
-      pos1.y = y || 0
+      let x = (mx - r.x - padding + 8) / factor - dotSize
+      let y = (my - r.y - padding + 8) / factor - dotSize
+      if (dragElement.id == "dotStart") {
+        dots["dotStart"].pos.x = x || 0
+        dots["dotStart"].pos.y = y || 0
+      } else {
+        dots["dotEnd"].pos.x = x || 0
+        dots["dotEnd"].pos.y = y || 0
+      }
     } else {
-      pos2.x = x || 0
-      pos2.y = y || 0
+      let x = (mx - r.x - padding + 8) / factor - dotSize
+      let y = (my - r.y - padding + 8) / factor - dotSize
+      let dX = dots["dotEnd"].pos.x - dots["dotStart"].pos.x
+      let dY = dots["dotEnd"].pos.y - dots["dotStart"].pos.y
+      let dx = x - dots["dotStart"].pos.x
+      let dy = y - dots["dotStart"].pos.y
+      dots[dragElement.getAttribute("dotindex")].pos = clamp(Math.cos(Math.atan(dX / dY) - Math.atan(dx / dy)) * Math.sqrt(dx ** 2 + dy ** 2) / Math.sqrt(dX ** 2 + dY ** 2), 0, 1)
     }
+
+    updateCenterDots()
     updateGradient()
     e.preventDefault()
   }
 })
 
 function n(x, y) {
-  return noise.noise2D(x / 100 * (varianceScale / 1000 * scale), y / 100 * (varianceScale / 1000 * scale))
+  return noise.noise2D(x / 100 * (varianceScale / 500), y / 100 * (varianceScale / 500))
 }
 
 function drawTriangle(x1, y1, x2, y2, x3, y3) {

@@ -49,18 +49,18 @@ input[type="text"] {
   /* object-fit: contain; */
   /* box-sizing: border-box; */
   padding: 50px;
-  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, .2));
+  filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.2));
   margin: 0 auto;
 }
 
-#colours {
+#colour {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-#colours input,
-#colours button {
+#colour input,
+#colour button {
   width: 30px;
   height: 30px;
   margin: 2px;
@@ -70,17 +70,17 @@ input[type="text"] {
   font-size: 25px;
 }
 
-#colours input {
+#colour input {
   padding: 0;
 }
 
-#colours div {
+#colour div {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-#colours button {
+#colour button {
   user-select: none;
   font-family: "Roboto", sans-serif;
 }
@@ -89,7 +89,14 @@ input[type="text"] {
   position: absolute;
   width: 16px;
   height: 16px;
-  background: dodgerblue;
+  background: #FF0000;
   border-radius: 50%;
-  display: none;
+  box-sizing: border-box;
+  border: 2px solid black;
+  box-shadow: 0 0 0 2px white;
+}
+
+.dot.active {
+  border: 3px solid white;
+  box-shadow: 0 0 0 3px black;
 }
