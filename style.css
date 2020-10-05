@@ -45,11 +45,12 @@ input[type="text"] {
 }
 
 #result {
-  width: calc(100% - 300px);
-  object-fit: contain;
-  box-sizing: border-box;
+  /* width: calc(100% - 300px); */
+  /* object-fit: contain; */
+  /* box-sizing: border-box; */
   padding: 50px;
   filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, .2));
+  margin: 0 auto;
 }
 
 #colours {
@@ -82,4 +83,13 @@ input[type="text"] {
 #colours button {
   user-select: none;
   font-family: "Roboto", sans-serif;
+}
+
+.dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: dodgerblue;
+  border-radius: 50%;
+  display: none;
 }

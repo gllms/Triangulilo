@@ -23,9 +23,6 @@
       <label for="variancescale">Noise Scale (%):</label>
       <input type="number" name="variancescale" id="variancescale" value="100" min="0"
         oninput="updateVarianceScale(this)" />
-      <label for="rotation">Rotation (°):</label>
-      <input type="number" name="rotation" id="rotation" value="45" oninput="updateRotation(this)" />
-
       <label for="seed">Seed:</label>
       <input type="text" name="seed" id="seed" value="" oninput="updateSeed(this)" />
     </div>
@@ -40,6 +37,9 @@
   </div>
   <canvas id="result" width="1920" height="1080"></canvas>
   <canvas id="sampler" width="1920" height="1080"></canvas>
+
+  <div class="dot" id="dot1"></div>
+  <div class="dot" id="dot2"></div>
 
   <script src="https://cdn.jsdelivr.net/gh/jwagner/simplex-noise.js/simplex-noise.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dragula@3.7.3/dist/dragula.min.js"></script>
