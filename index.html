@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Triangulilo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Abel&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -18,27 +18,27 @@
       <input type="number" name="height" id="height" value="1080" min="100" step="1" oninput="updateHeight(this)" />
       <label for="scale">Scale (%):</label>
       <input type="number" name="scale" id="scale" value="10" min="1" oninput="updateScale(this)" />
-      <label for="variance">Noise (%):</label>
+      <label for="variance">Noise:</label>
       <input type="number" name="variance" id="variance" value="100" min="0" oninput="updateVariance(this)" />
-      <label for="variancescale">Noise Scale (%):</label>
+      <label for="variancescale">Noise Scale:</label>
       <input type="number" name="variancescale" id="variancescale" value="100" min="0"
         oninput="updateVarianceScale(this)" />
       <label for="seed">Seed:</label>
       <input type="text" name="seed" id="seed" value="" oninput="updateSeed(this)" />
     </div>
     <div id="colour">
-      <input type="color" value="#FF0000" id="colourInput" oninput="updateColour()" />
-      <div>
-        <button onclick="addColour()">+</button>
-        <button onclick="removeColour()">–</button>
-      </div>
+      <button onclick="addColour()" title="Add color stop">+</button>
+      <input type="color" value="#FFFF00" id="colourInput" oninput="updateColour()" />
+      <button onclick="removeColour()" title="Remove color stop">–</button>
     </div>
+    <br />
+    <a href="" id="saveButton" download="wallpaper.jpg" onclick="saveImage(this)">SAVE</a>
   </div>
   <canvas id="result" width="1920" height="1080"></canvas>
   <canvas id="sampler" width="1920" height="1080"></canvas>
 
-  <div class="dot active" id="dotStart" dotindex="dotStart" style="background: #FF0000; display: none"></div>
-  <div class="dot" id="dotEnd" dotindex="dotEnd" style="background: #FFFF00; display: none"></div>
+  <div class="dot active" id="dotStart" dotindex="dotStart" style="background: #FFFF00; display: none"></div>
+  <div class="dot" id="dotEnd" dotindex="dotEnd" style="background: #F0006C; display: none"></div>
 
   <script src="https://cdn.jsdelivr.net/gh/jwagner/simplex-noise.js/simplex-noise.js"></script>
   <script src="script.js"></script>

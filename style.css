@@ -6,7 +6,9 @@ body {
   display: flex;
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: "Abel", sans-serif;
+  font-size: 1.2em;
+  text-transform: uppercase;
   height: 100vh;
 }
 
@@ -33,21 +35,16 @@ body {
 }
 
 #toolbar #options input {
-  text-align: right;
   margin: 5px;
-  width: 6em;
-  border: 1px solid #ccc;
-  font-family: "Roboto", sans-serif;
-}
-
-input[type="text"] {
-  text-align: left !important;
+  width: 3em;
+  border: none;
+  font-family: "Abel", sans-serif;
+  font-size: 1em;
+  font-weight: bold;
+  color: #B000B5;
 }
 
 #result {
-  /* width: calc(100% - 300px); */
-  /* object-fit: contain; */
-  /* box-sizing: border-box; */
   padding: 50px;
   filter: drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.2));
   margin: 0 auto;
@@ -57,21 +54,38 @@ input[type="text"] {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
 }
 
-#colour input,
 #colour button {
   width: 30px;
   height: 30px;
-  margin: 2px;
+  margin: 10px;
   padding: 3px;
   border: none;
-  background: none;
-  font-size: 25px;
+  background: #da00e0;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  border-radius: 50%;
 }
 
 #colour input {
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background: none;
+}
+
+#colour input::-webkit-color-swatch-wrapper {
   padding: 0;
+}
+
+#colour input::-webkit-color-swatch {
+  border-radius: 50%;
+  background: none;
+  border: 2px solid #eee;
 }
 
 #colour div {
@@ -82,7 +96,7 @@ input[type="text"] {
 
 #colour button {
   user-select: none;
-  font-family: "Roboto", sans-serif;
+  font-family: "Abel", sans-serif;
 }
 
 .dot {
@@ -99,4 +113,24 @@ input[type="text"] {
 .dot.active {
   border: 3px solid white;
   box-shadow: 0 0 0 3px black;
+}
+
+#saveButton {
+  margin: 0 auto;
+  text-decoration: none;
+  font-weight: bold;
+  color: white;
+  background: #da00e0;
+  padding: .75em 2em;
+  border-radius: 2em;
+  box-shadow: 0 7px 10px -3px rgba(0, 0, 0, .5);
+  transition: box-shadow .5s;
+}
+
+#save:hover {
+  box-shadow: 0 2px 10px -3px rgba(0, 0, 0, .5);
+}
+
+#saveButton:active {
+  background: #B000B5;
 }

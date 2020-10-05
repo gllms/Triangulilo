@@ -25,14 +25,14 @@ let dots = {
       x: 0,
       y: 0
     },
-    colour: "#FF0000"
+    colour: "#FFFF00"
   },
   dotEnd: {
     pos: {
       x: width,
       y: height
     },
-    colour: "#FFFF00"
+    colour: "#F0006C"
   }
 }
 
@@ -53,11 +53,14 @@ let dragElement = undefined
 let activeElement = $("#dotStart")
 let dragTip = false
 
-updateGradient()
-draw()
-updateCanvas()
-$("#dotStart").style.display = "block"
-$("#dotEnd").style.display = "block"
+window.addEventListener("load", function () {
+  updateGradient()
+  draw()
+  updateCanvas()
+
+  $("#dotStart").style.display = "block"
+  $("#dotEnd").style.display = "block"
+})
 
 window.addEventListener("resize", updateCanvas)
 window.addEventListener("resize", updateCenterDots)
@@ -304,6 +307,10 @@ document.body.addEventListener("mousemove", function (e) {
     e.preventDefault()
   }
 })
+
+function saveImage(e) {
+  e.href = c.toDataURL("image/jpg")
+}
 
 function n(x, y) {
   return noise.noise2D(x / 100 * (varianceScale / 500), y / 100 * (varianceScale / 500))
