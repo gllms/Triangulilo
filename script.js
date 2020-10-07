@@ -52,6 +52,7 @@ let dragging = false
 let dragElement = undefined
 let activeElement = $("#dotStart")
 let dragTip = false
+let slow = false
 
 window.addEventListener("load", function () {
   updateGradient()
@@ -66,6 +67,7 @@ window.addEventListener("resize", updateCanvas)
 window.addEventListener("resize", updateCenterDots)
 
 function draw() {
+  let d = performance.now()
   let size = (width + height) / 2 / 100 * scale
   let m = variance
   for (let x = -m; x < width + m; x += size) {
@@ -99,6 +101,7 @@ function draw() {
       else drawTriangle(x1, y1, x3, y3, x4, y4)
     }
   }
+  slow = (performance.now() - d > 70) ? true : false
 }
 
 function updateGradient() {
@@ -268,6 +271,7 @@ document.body.addEventListener("mousedown", function (e) {
 
 document.body.addEventListener("mouseup", function (e) {
   dragging = false
+  if (slow) updateGradient()
 })
 
 document.body.addEventListener("mousemove", function (e) {
@@ -302,8 +306,8 @@ document.body.addEventListener("mousemove", function (e) {
       dots[dragElement.getAttribute("dotindex")].pos = clamp(Math.cos(Math.atan(dX / dY) - Math.atan(dx / dy)) * Math.sqrt(dx ** 2 + dy ** 2) / Math.sqrt(dX ** 2 + dY ** 2), 0, 1)
     }
 
-    updateCenterDots()
-    updateGradient()
+    updateCenterDots() 
+    if (!slow) updateGradient()
     e.preventDefault()
   }
 })
